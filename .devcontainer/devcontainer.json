@@ -1,26 +1,24 @@
 {
   "name": "PySide6 GUI Environment",
   "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
-  
-  // Utiliza a extensão oficial do Microsoft Dev Containers para interface gráfica
+
   "features": {
     "ghcr.io/devcontainers/features/desktop-lite:1": {
-      "desktopElement": "fluxbox"
+      "version": "latest",
+      "webPort": "6080",
+      "vncPort": "5901"
     }
   },
 
-  // Instala as dependências de sistema do Qt e o PySide6 após a criação do contêiner
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libxcb-cursor0 libxcb-xinerama0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxkbcommon-x11-0 libgl1 libegl1 && pip install PySide6",
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libxcb-cursor0 libxcb-xinerama0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxkbcommon-x11-0 libgl1 libegl1 libdbus-1-3 libfontconfig1 && pip install PySide6",
 
-  // Configura a porta do noVNC para abrir automaticamente com rótulo
   "portsAttributes": {
     "6080": {
       "label": "noVNC Desktop",
-      "onAutoForward": "notify"
+      "onAutoForward": "openBrowser"
     }
   },
 
-  // Define a variável DISPLAY globalmente para todo o ambiente
   "containerEnv": {
     "DISPLAY": ":1"
   }
