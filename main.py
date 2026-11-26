@@ -53,19 +53,30 @@ class IngressoVIP(Ingresso):
     def calcular_preco(self, preco_base) -> float:
         return preco_base * 1.5
 
-class Evento:
-    def __init__(self, nome: str, local: str, data_hora: datetime) -> None:
-        self.nome = nome
-        self.local = local
-        self.data_hora = data_hora
-        self.setores: list[Setor] = []
-
 class Setor:
     def __init__(self, nome: str, capacidade: int, preco_base: float) -> None:
         self.nome = nome
         self.capacidade = capacidade
         self.preco_base = preco_base
         self.ingressos_vendidos: list[Ingresso] = []
+
+    @property
+    def vagas_disponiveis(self) -> int:
+        return self.capacidade - len(self.ingressos_vendidos)
+
+    @property
+    def ta_lotado(self) -> bool:
+        if self.vagas_disponiveis == 0:
+            return True
+        else:
+            return False
+
+class Evento:
+    def __init__(self, nome: str, local: str, data_hora: datetime) -> None:
+        self.nome = nome
+        self.local = local
+        self.data_hora = data_hora
+        self.setores: list[Setor] = []
 
 class Comprador:
     def __init__(self, nome: str, cpf: str, email: str) -> None:
