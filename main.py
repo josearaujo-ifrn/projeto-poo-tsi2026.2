@@ -43,14 +43,14 @@ class Evento:
         self.nome = nome
         self.local = local
         self.data_hora = data_hora
-        self.setores = []
+        self.setores: list[Setor] = []
 
 class Setor:
     def __init__(self, nome: str, capacidade: int, preco_base: float) -> None:
         self.nome = nome
         self.capacidade = capacidade
         self.preco_base = preco_base
-        self.ingressos_vendidos = 0
+        self.ingressos_vendidos: list[Ingresso] = []
 
 class Comprador:
     def __init__(self, nome: str, cpf: str, email: str) -> None:
@@ -61,8 +61,10 @@ class Comprador:
 class Compra:
     def __init__(self, comprador: Comprador) -> None:
         self.comprador = comprador
-        self.ingressos = 0
+        self.ingressos: list[Ingresso] = []
         self.compra_cancelada = False
 
 class Bilheteria:
-    pass
+    def __init__(self) -> None:
+        self.eventos: list[Evento] = []
+        self.compradores: list[Comprador] = []
