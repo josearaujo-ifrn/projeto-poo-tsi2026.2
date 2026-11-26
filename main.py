@@ -1,5 +1,7 @@
+from __future__ import annotations # a classe setor é declarada depois, e causa erro em ingresso, esse import "evita" esse erro
 from datetime import datetime
 from abc import ABC, abstractmethod
+from uuid import uuid4
 
 # Exceções Personalizadas:
 class IngressoError(Exception):
@@ -22,19 +24,32 @@ class CancelamentoNaoPermitidoError(IngressoError):
 
 # Classes Principais:
 class Ingresso(ABC):
+    def __init__(self, setor: Setor) -> None:
+        self.codigo = str(uuid4()) # a funcao uuid4 gera um codigo aleatorio de uns 20 digitos
+        self.setor = setor
+    
     @abstractmethod
     def calcular_preco(self, preco_base: float) -> float:
         """As subclasses irão implementar o método."""
 
 class IngressoInteira(Ingresso):
+    def __init__(self, setor: Setor) -> None:
+        super().__init__(setor)
+
     def calcular_preco(self, preco_base) -> float:
         return preco_base
 
 class IngressoMeia(Ingresso):
+    def __init__(self, setor: Setor) -> None:
+        super().__init__(setor)
+
     def calcular_preco(self, preco_base) -> float:
         return preco_base * 0.5
 
 class IngressoVIP(Ingresso):
+    def __init__(self, setor: Setor) -> None:
+        super().__init__(setor)
+    
     def calcular_preco(self, preco_base) -> float:
         return preco_base * 1.5
 
