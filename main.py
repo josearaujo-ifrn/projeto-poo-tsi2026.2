@@ -25,6 +25,9 @@ class CancelamentoNaoPermitidoError(IngressoError):
 class IngressoNaoEncontradoError(IngressoError):
     """No método da classe a exceção será personalizada e aplicada."""
 
+class SetorNaoEncontradoError(IngressoError):
+    """No método da classe a exceção será personalizada e aplicada."""
+
 # Classes Principais:
 class Ingresso(ABC):
     def __init__(self, setor: Setor) -> None:
@@ -152,7 +155,62 @@ class Evento:
         self.nome = nome
         self.local = local
         self.data_hora = data_hora
-        self.setores: list[Setor] = []
+        self._setores: list[Setor] = []
+
+    @property
+    def nome(self) -> str:
+        return self._nome
+
+    @nome.setter
+    def nome(self, nome: str) -> None:
+        if nome.strip() == "":
+            raise ValueError("O nome não deve estar vazio.")
+        self._nome = nome.strip()
+
+    @property
+    def local(self) -> str:
+        return self._local
+
+    @local.setter
+    def local(self, local: str) -> None:
+        if local.strip() == "":
+            raise ValueError("O local não deve estar vazio.")
+        self._local = local.strip()
+
+    @property
+    def data_hora(self) -> datetime:
+        return self._data_hora
+
+    @data_hora.setter
+    def data_hora(self, data_hora: datetime) -> None:
+        if data_hora < datetime.now():
+            raise ValueError("A hora já passou.")
+        self._data_hora = data_hora
+
+    @property
+    def setores(self) -> tuple:
+        return tuple(self._setores)
+
+    @property
+    def ja_aconteceu(self) -> bool:
+        return self.data_hora <= datetime.now()
+
+    @property
+    def tem_ingressos_vendidos(self) -> bool:
+        for setor in self._setores:
+            if len(setor.ingressos_vendidos) > 0:
+                return True
+        return False
+
+    def adicionar_setor(self, setor: Setor) -> None:
+        if setor in self._setores:
+            raise ValueError("Esse setor já está adicionado.")
+        self._setores.append(setor)
+
+    def remover_setor(self, setor: Setor) -> None:
+        if setor not in self._setores:
+            raise SetorNaoEncontradoError("Esse setor não está adicionado.")
+        self._setores.remove(setor)
 
 class Comprador:
     def __init__(self, nome: str, cpf: str, email: str) -> None:
